@@ -3,21 +3,22 @@ import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <label htmlFor = 'province'>Province : </label>
+        <select id = 'province'>
+          <option value='select'>Select</option>
+          <option value='bangkok'>Bangkok</option>
+          <option value='rayong'>Rayong</option>
+          <option value='chonburi'>Chonburi</option>
+        </select>
+      <br/>
+      <label htmlFor = 'district'>District : </label>
+      <select id = 'district'>
+        <option value = 'select'>Select</option>
+        <option value = 'bang-na'>Bang-Na</option>
+        <option value = 'bangkhunnon'>Bangkhunnon</option>
+        <option value = 'pathum-wan'>Pathum-Wan</option>
+      </select>
     </div>
   );
 }
