@@ -6,7 +6,7 @@ function App() {
   }
   return (
     <div className="App">
-      <select onClick={handleSelect}>
+      <select onChange={handleSelect}>
         <optgroup label='country'>
           <option value='Japan'>Japan</option>
           <option value='Australia'>Australia</option>
