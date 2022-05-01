@@ -1,23 +1,19 @@
-import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  const handleCheckbox = (event) => {
+    console.log(event.target.name)
+    console.log(event.target.value)
+    console.log('Tick')
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <input type='checkbox' name='phoneBrand' id='phoneBrand' value='iphone' onChange={handleCheckbox} />
+      <label htmlFor='phoneBrand'>Iphone</label>
+      <input type='checkbox' name='phoneBrand' id='phoneBrand' value='samsung' onChange={handleCheckbox}/>
+      <label htmlFor='phoneBrand'>Samsung</label>
+      <input type='checkbox' name='phoneBrand' id='phoneBrand' value='Oppo' onChange={handleCheckbox}/>
+      <label htmlFor='phoneBrand'>Oppo</label>
     </div>
   );
 }
