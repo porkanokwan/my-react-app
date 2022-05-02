@@ -1,0 +1,8 @@
+.main{
+    border: 1px solid black;
+    margin: 10px 20px;
+}
+.box{
+    display: flex;
+    justify-content: space-between;
+}
