@@ -1,23 +1,31 @@
-import logo from './logo.svg';
 import './App.css';
+import {useState} from 'react'
+
+const mapProvinceDistrict = {
+  BangKok : ['Bangbon', 'Bangkhae', 'Bangkapi'],
+  Phuket : ['Kathu', 'Thalang'],
+  Ranong : ['Kra buri', 'Ka poe']
+}
 
 function App() {
+  const [selectProvince, setSelectProvince] = useState('')
+  const option = selectProvince === '' ? null : mapProvinceDistrict[selectProvince].map(el => <option value={el}>{el}</option>);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <label htmlFor='province'>Province : </label>
+      <select id='province' value={selectProvince} onChange={(e) => setSelectProvince(e.target.value)}>
+        {/* ถ้าเราเลือกอะไร ค่า value จะเป็นไปตามที่เลือก เช่น เลือก BangKok value = BangKok ทำให้ค่าของ state เปลี่ยนไปตามที่เราเลือก*/}
+        <option value=''>SELECT</option>
+        <option value='BangKok'>BangKok</option>
+        <option value='Phuket'>Phuket</option>
+        <option value='Ranong'>Ranong</option>
+      </select>
+
+      <label htmlFor='distract'>Distract : </label>
+      <select id='distract'>
+        <option value=''>SELECT</option>
+        {option}
+      </select>
     </div>
   );
 }
