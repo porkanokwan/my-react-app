@@ -75,15 +75,16 @@ console.log(instaceEngineer.sayHi()); // over
 // }
 
 class App extends Component {
-  // ปกติใน constructor function ของ Class Component จะรับ parameter props อยู่แล้ว ดังนั้น เวลาจะสืบทอดต่อ แล้วจะ override เลยต้องเรียก super(props) ส่งค่า props เข้าไปเป็น parameter ให้ constructor function ของ Class Component ทำงาน
+  // ปกติใน constructor function ของ Class Component จะรับ parameter props อยู่แล้ว ดังนั้น Class ที่จะสืบทอดต่อ แล้วจะ override เลยต้องเรียก super(props) ส่งค่า props เข้าไปเป็น parameter ให้ constructor function ของ Class Component ทำงาน ซึ่งทำให้ Class ที่เรากำหนดเรียกใช้ property/method ต่างๆ ของ Class Component ได้ โดยใช้ this เพราะ this จะหมายถึง instace obj ของ class นั้นที่สืบทอดทุกอย่างมาจาก Class Component 
   constructor(props) {
+    console.log('Constructor App run');
     super(props)
-    // State ต้องกำหนดใน constructor function และ State เป็น property ตัวนึงของ class component เวลาจะเรียกใช้ 
+    // State ต้องกำหนดใน constructor function และ State เป็น property ตัวนึงของ class component  
     this.state = {
       // ไม่สามารถแยก state แบบ useState ได้ต้องรวมค่า state ใน obj นี้เท่านั้น key-value 1ชุด === state 1 ตัว
       // transaction: [],
       // editingTransaction: null,
-      // setIsShow: false,
+      isShow: true,
       count: 0
     }
     this.handleDecrement = this.handleDecrement.bind(this); // this จะหมายถึง obj ของ App component เพราะ ตัวที่เรียกคือ constructor และตัวที่จะเรียก constructor ได้ มีแค่ obj ของ App เท่านั้น
@@ -91,39 +92,61 @@ class App extends Component {
 
   // การสร้าง state อีกวิธี(ปัจจุบัน)
   // state = {
-    // count: 0,
-    // test: 'Test state'
+  //   count: 0,
+  //   test: 'Test state', 
+  //   isShow: false
   // };
 
-  handleDecrement() {
+  handleDecrement = () => {
     console.log(this);
     this.setState({ count: this.state.count - 1 })
   };
 
+  componentDidMount() {
+    console.log('App componentDidMount')
+  }
+
+  componentDidUpdate() {
+    console.log('App componentDidUpdate run')
+  }
+
+  /* เมื่อ Class ที่เรากำหนดถูกเรียกให้ทำงาน คือการ insert เข้าไปใน DOM React จะสร้าง instance obj สำหรับ Class นั้นๆ ให้โดยที่เรามองไม่เห็นแบบนี้ const instanceObj = new ชื่อClass(props) 
+  และเมื่อมี instance obj ของ class นั้นๆ เกิดขึ้น react จะสร้าง lifecycle ของ obj ของ class นั้นๆ ให้เราด้วย มี 3 phase */
+
   render() {
+    console.log('Render App run');
     // เข้าถึง State แบบตรงๆ ไม่ได้ต้องผ่าน this เท่านั้น
     const { count } = this.state; 
     console.log(this.state)
     return(
       <div className='App'>
-        {/* props จะเก็บ attribute เป็น obj เหมือนเดิม */}
-        {/* <Counter count={this.state.count} title='Counter App'/> */}
-        {/*เมื่อ Class ที่เรากำหนดถูกสร้าง/ทำงาน React จะสร้าง instance obj สำหรับ Class นั้นๆ ให้โดยที่เรามองไม่เห็นแบบนี้ const instanceObj = new ชื่อClass(props) 
-        โดยที่ส่งค่า props ของ class นั้นๆ เข้าไปใน constructor function ให้เราด้วย ซึ่งทำให้ Class ที่เรากำหนดเรียกใช้ property/method ต่างๆ ของ Class Component ของ react ได้
-        เช่น propery props, property state , method setState เป็นต้น และ keyword this ที่เรียกใช้ภายใน class จะหมายถึง instance obj ของ class นั้นๆ */}
-        <Counter count={count} title='Counter App'/>
-        {/* this.setState: merge old State and setState argument => {...{count: 0, test: 'Test state'}, ...{count: 1}} แล้ว property ที่ซ้ำกันจะเอาค่าใหม่ที่อยู่ขวามือ ไปแทนที่ค่าเดียวกันที่อยู่ซ้ายมือ */}
+        <h1>Counter App</h1>
+        <div><button onClick={() => this.setState({ isShow: !this.state.isShow })}>Toggle</button></div>
+        
+        <form action=''>
+          <input/>
+          <button>Click</button> {/* ใน form ถ้าเราไม่ได้กำหนด path ใน action ว่าหลังจากกดปุ่มแล้วให้ไปที่ server ไหน มันจะส่งข่อมูลกลับมาที่ url ที่มันอยู่ตอนนี้ ก็จะเหมือนกับว่ามัน render มาที่ component ตัวเดิม เท่ากับว่ามันจะทำการ render component App เข้าไปใน DOM ใหม่ เหมือนกับการ refresh หน้าจอใหม่ */}
+        </form>
+
+        {/* Phase 1: Mounting จากตัวอย่างนี้คือ กดปุ่ม toogle แล้ว Component Counter ถูก insert เข้า DOM */}
+        {this.state.isShow ? <> <Counter count={count} title='Counter App'/>
+        {/* Phase 2: Updating จากตัวอย่างนี้คือ กดปุ่ม +/-/reset จะเกิดการ update state ค่า count เปลี่ยน */}
         <button onClick={() => this.setState({ count: this.state.count + 1})}>+</button>
         <button onClick={this.handleDecrement }>-</button>
-        {/* การเขียน onClick={this.handleDecrement} แบบนี้จะหมายความว่า onClick={function() { this.setState({ count: this.state.count - 1 }) } } 
-        จะทำให้ this ที่อยู่หน้า function ที่เป็นตัวเรียกใช้ function หายไป พอมันหายไป this == undefined ทำให้มันไม่รู้จัก this ที่อยู่ข้างใน function นี้ มีวิธีแก้คือ 
-        1. ตั้ง function handleDecrement เป็น arrow เพราะ arrow function ไม่มี this
-        2. ใช้ bind(this) ที่ constructor เพราะ bind จะบอกว่า this ใน function คืออะไร ซึ่งมันก็จะหมายถึงตัวมันเองก็คือ obj ของ App component
-        */}
-        <button onClick={() => this.setState({ count: this.state.count = 0})}>reset</button>
+        <button onClick={() => this.setState({ count: this.state.count = 0})}>reset</button> </> : null}
+        {/* Phase 3: Unmounting จากตัวอย่างนี้คือ กดปุ่ม toogle แล้ว Component Counter ถูก remove ออกไปจาก DOM */}  
     </div>
     )
   }
 }
 
 export default App;
+
+// ลำดับการ run 
+// 1. เมื่อ Class App ถูก insert เข้า DOM/ถูกสร้าง เกิดการสร้าง obj ของ App แบบนี้ 
+  // const app = new App(props);
+// เมื่อสร้าง obj ของ App เสร็จ constructor ของ App จะ run อัตโนมัติ
+// 2. พอ constructor ของ App run เสร็จ render method จะ run ต่อทันที ซึ่งมันจะ return JSX ออกมา ถ้าการ return มี Class Component อยู่มันจะ Mounting Component ตัวนั้นเข้ามาใน DOM
+// พอ Mounting เข้ามา จะเกิดการสร้าง obj ของ Class นั้นเหมือนแบบของ App ซึ่งใน code นี้ เจอ Component Counter มันก็เลย Mounting และสร้าง obj ของ Component Counter แบบนี้
+  // const counter = new Counter(props);
+// จากนั้น constructor ของ Counter จะ run แล้ว render method ก็จะ run ต่อ ตามลำดับ
